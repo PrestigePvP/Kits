@@ -27,15 +27,15 @@ public class DuelManager {
     private Location two;
     private Kits plugin;
 
-    public DuelManager(Kits plugin){
+    public DuelManager(Kits plugin) {
         this.plugin = plugin;
         Object object = plugin.getConfig().get("locations");
-        if(object instanceof List) {
+        if (object instanceof List) {
             List<PersistableLocation> locations = GenericUtils.createList(object, PersistableLocation.class);
-            for(PersistableLocation location : locations) {
-                if(one == null){
+            for (PersistableLocation location : locations) {
+                if (one == null) {
                     one = location.getLocation();
-                }else {
+                } else {
                     two = location.getLocation();
                 }
             }
@@ -78,8 +78,8 @@ public class DuelManager {
         return null;
     }
 
-    public void save(){
-        plugin.getConfig().set("locations", Arrays.asList(one, two));
+    public void save() {
+        plugin.getConfig().set("locations", Arrays.asList(new PersistableLocation(one), new PersistableLocation(two)));
         plugin.saveConfig();
     }
 
