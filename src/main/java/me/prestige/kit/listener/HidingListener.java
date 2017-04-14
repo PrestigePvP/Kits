@@ -52,11 +52,14 @@ public class HidingListener implements Listener {
         Player attacker = Bukkit.getPlayer(e.getDuel().getAttacker());
         Player attacked = Bukkit.getPlayer(e.getDuel().getOther());
         for (Player on : Bukkit.getOnlinePlayers()) {
+           if(plugin.getDuelManager().getDuel(on) != null) continue;
             if (attacked != null /*TODO check if they're vanished */) {
                 attacked.showPlayer(on);
+                on.showPlayer(attacked);
             }
             if (attacker != null/*TODO check if they're vanished */) {
                 attacker.showPlayer(on);
+                on.showPlayer(attacker);
             }
         }
     }
