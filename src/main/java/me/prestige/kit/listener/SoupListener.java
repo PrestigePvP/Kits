@@ -12,16 +12,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class SoupListener implements Listener {
 
+    private static final int HEALTH_PER_SOUP;
+
+    static {
+        HEALTH_PER_SOUP = 7;
+    }
 
 
 
     @EventHandler
     public void OnPlayerSoup(final PlayerInteractEvent event) {
         final Player player = event.getPlayer();
-        if ((player).getHealth() != 20.0) {
-            final int soup = 7;
+        if(player.getHealth() == 20 && player.getFoodLevel() == 20) return;
+        if (player.getHealth() != 20.0) {
             if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && player.getItemInHand().getType() == Material.MUSHROOM_SOUP) {
-                player.setHealth(((player).getHealth() + soup > (player).getMaxHealth()) ? (player).getMaxHealth() : ((player).getHealth() + soup));
+                player.setHealth(((player).getHealth() + HEALTH_PER_SOUP > (player).getMaxHealth()) ? (player).getMaxHealth() : ((player).getHealth() + HEALTH_PER_SOUP));
                 event.getPlayer().getItemInHand().setType(Material.BOWL);
             }
         }else {

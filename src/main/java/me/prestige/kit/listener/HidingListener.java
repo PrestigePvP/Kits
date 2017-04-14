@@ -39,8 +39,11 @@ public class HidingListener implements Listener {
         for (Player on : Bukkit.getOnlinePlayers()) {
             if (on.getUniqueId().equals(e.getDuel().getAttacker()) || on.getUniqueId().equals(e.getDuel().getOther()))
                 continue;
-            hidePlayer(on, attacked);
-            hidePlayer(on, attacker);
+            on.hidePlayer(attacker);
+            attacker.hidePlayer(on);
+
+            on.hidePlayer(attacked);
+            attacked.hidePlayer(on);
         }
     }
 
@@ -49,17 +52,11 @@ public class HidingListener implements Listener {
         Player attacker = Bukkit.getPlayer(e.getDuel().getAttacker());
         Player attacked = Bukkit.getPlayer(e.getDuel().getOther());
         for (Player on : Bukkit.getOnlinePlayers()) {
-            if (attacked != null) {
-                EntityPlayer nmsHiding = ((CraftPlayer) attacked).getHandle();
+            if (attacked != null /*TODO check if they're vanished */) {
                 attacked.showPlayer(on);
-                EntityPlayer nmsFrom = ((CraftPlayer) on).getHandle();
-                nmsFrom.playerConnection.sendPacket(PacketPlayOutPlayerInfo.removePlayer(nmsHiding));
             }
-            if (attacker != null) {
-                EntityPlayer nmsHiding = ((CraftPlayer) attacker).getHandle();
+            if (attacker != null/*TODO check if they're vanished */) {
                 attacker.showPlayer(on);
-                EntityPlayer nmsFrom = ((CraftPlayer) on).getHandle();
-                nmsFrom.playerConnection.sendPacket(PacketPlayOutPlayerInfo.removePlayer(nmsHiding));
             }
         }
     }

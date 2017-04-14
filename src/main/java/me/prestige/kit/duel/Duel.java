@@ -1,6 +1,5 @@
 package me.prestige.kit.duel;
 
-import com.sun.org.apache.xml.internal.security.utils.JavaUtils;
 import lombok.Getter;
 import me.prestige.kit.Kits;
 import me.prestige.kit.duel.event.DuelEndEvent;
@@ -34,7 +33,7 @@ public class Duel {
 
     public void start() {
         Player one = Bukkit.getPlayer(attacker);
-        Player two = Bukkit.getPlayer(attacker);
+        Player two = Bukkit.getPlayer(other);
         if (one == null || two == null) {
             return;
         }
@@ -58,6 +57,8 @@ public class Duel {
     public void end(Player winner, UUID loser) {
         Player dead = Bukkit.getPlayer(loser);
         Bukkit.getPluginManager().callEvent(new DuelEndEvent(this));
+        winner.removePotionEffect(PotionEffectType.SPEED);
+        winner.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         winner.teleport(Bukkit.getWorld("world").getSpawnLocation());
         winner.sendMessage(ChatColor.YELLOW + "You have won the fight against " + Bukkit.getOfflinePlayer(loser).getName());
         winner.getInventory().clear();
@@ -68,7 +69,7 @@ public class Duel {
         if (dead.isDead()) {
             dead.spigot().respawn();
         }
-        dead.sendMessage(ChatColor.GOLD + "You have lost the " + ChatColor.GREEN + "Buffed w/ Speed II " + ChatColor.GOLD + "match to " + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + "." + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + "had" + ChatColor.RED + countSoups(winner) + ChatColor.GOLD + "soups and " + ChatColor.RED + Math.round(winner.getHealth() / 2) + "hearts" + ChatColor.GOLD + "left.");
+        dead.sendMessage(ChatColor.GOLD + "You have lost the " + ChatColor.GREEN + "Buffed w/ Speed II " + ChatColor.GOLD + "match to " + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + "." + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + " had " + ChatColor.RED + countSoups(winner) + ChatColor.GOLD + " soups and " + ChatColor.RED + Math.round(winner.getHealth() / 2) + " hearts " + ChatColor.GOLD + "left.");
         dead.getInventory().clear();
         dead.getInventory().setArmorContents(null);
         dead.teleport(Bukkit.getWorld("world").getSpawnLocation());
@@ -76,16 +77,18 @@ public class Duel {
     }
 
     private void fillInventory(Player player) {
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
         player.getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
-        player.getInventory().setHelmet(new ItemStack(Material.IRON_CHESTPLATE));
-        player.getInventory().setHelmet(new ItemStack(Material.IRON_LEGGINGS));
-        player.getInventory().setHelmet(new ItemStack(Material.IRON_BOOTS));
+        player.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+        player.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+        player.getInventory().setBoots(new ItemStack(Material.IRON_BOOTS));
         ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-        player.getInventory().addItem(sword);
+        player.getInventory().setItem(0, sword);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 1));
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             player.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP));
         }
     }
@@ -93,7 +96,7 @@ public class Duel {
     private int countSoups(Player player) {
         int amount = 0;
         for (ItemStack soup : player.getInventory().getContents()) {
-            if (!soup.getType().equals(Material.MUSHROOM_SOUP)) continue;
+            if (soup == null || !soup.getType().equals(Material.MUSHROOM_SOUP)) continue;
             amount++;
         }
         return amount;

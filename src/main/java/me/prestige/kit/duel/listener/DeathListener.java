@@ -28,6 +28,7 @@ public class DeathListener implements Listener {
     public void onKill(PlayerDeathEvent e){
         Duel duel;
         if ((duel = plugin.getDuelManager().getDuel(e.getEntity())) == null) return;
+        e.setDeathMessage(null);
         plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
