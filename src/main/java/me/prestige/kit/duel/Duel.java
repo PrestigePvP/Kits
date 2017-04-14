@@ -65,7 +65,7 @@ public class Duel {
             dead.spigot().respawn();
         }
         // send our pretty message
-        dead.sendMessage(ChatColor.GOLD + "You have lost the " + ChatColor.GREEN + "Buffed w/ Speed II " + ChatColor.GOLD + "match to " + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + "." + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + " had " + ChatColor.RED + countSoups(winner) + ChatColor.GOLD + " soups and " + ChatColor.RED + Math.round(winner.getHealth() / 2) + " hearts " + ChatColor.GOLD + "left.");
+        dead.sendMessage(ChatColor.GOLD + "You have lost the " + ChatColor.GREEN + "Buffed w/ Speed II " + ChatColor.GOLD + "match to " + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + ".\n" + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + " had " + ChatColor.RED + countSoups(winner) + ChatColor.GOLD + " soups and " + ChatColor.RED + Math.round(winner.getHealth() / 2) + " hearts " + ChatColor.GOLD + "left.");
         // In case something weird happened we need to clear their stuff
         dead.getInventory().clear();
         dead.getInventory().setArmorContents(null);

@@ -32,11 +32,11 @@ public class Kits extends JavaPlugin {
 
     @Override
     public void onEnable(){
+        ConfigurationSerialization.registerClass(PersistableLocation.class);
         if (!new File(getDataFolder(), "config.yml").exists()) {
             saveDefaultConfig();
         }
         getConfig().options().copyDefaults(true);
-        ConfigurationSerialization.registerClass(PersistableLocation.class);
 
         duelManager = new DuelManager(this);
         registerListener();

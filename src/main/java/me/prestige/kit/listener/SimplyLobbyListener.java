@@ -20,14 +20,14 @@ public class SimplyLobbyListener  implements Listener{
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){
-        if(!event.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !event.getPlayer().isOp()){
+        if(!event.getPlayer().getGameMode().equals(GameMode.CREATIVE) || !event.getPlayer().isOp()){
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event){
-        if(!event.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !event.getPlayer().isOp()){
+        if(!event.getPlayer().getGameMode().equals(GameMode.CREATIVE) || !event.getPlayer().isOp()){
             event.setCancelled(true);
         }
     }
