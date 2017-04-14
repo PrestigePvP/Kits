@@ -36,6 +36,10 @@ public class DuelCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "Player " + ChatColor.GRAY + args[0] + ChatColor.RED + " not found!");
             return true;
         }
+        if(plugin.getDuelManager().getLocations().size() != 2){
+            player.sendMessage(ChatColor.RED + "Please contact an admin, the arena must be setup!");
+            return true;
+        }
         // Make sure they're not inviting someone already in a duel
         if (plugin.getDuelManager().getDuel(other) != null) {
             player.sendMessage(ChatColor.RED + "That player is already in a duel!");

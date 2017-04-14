@@ -43,8 +43,8 @@ public class Duel {
         // Call this for hiding folks
         Bukkit.getPluginManager().callEvent(new DuelStartEvent(this));
         // Teleport them
-        one.teleport(Bukkit.getWorld("world").getSpawnLocation().add(0, 0, 10));
-        two.teleport(Bukkit.getWorld("world").getSpawnLocation().add(10, 0, 0));
+        one.teleport(Kits.getPlugin(Kits.class).getDuelManager().getLocations().get(0).getLocation());
+        two.teleport(Kits.getPlugin(Kits.class).getDuelManager().getLocations().get(1).getLocation());
 
         // Give them gear
         fillInventory(one);

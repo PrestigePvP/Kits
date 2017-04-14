@@ -2,18 +2,23 @@ package me.prestige.kit;
 
 import lombok.Getter;
 import me.prestige.kit.commands.AcceptCommand;
+import me.prestige.kit.commands.ArenaCommand;
 import me.prestige.kit.commands.DuelCommand;
 import me.prestige.kit.duel.DuelManager;
 import me.prestige.kit.duel.listener.DeathListener;
 import me.prestige.kit.listener.HidingListener;
 import me.prestige.kit.listener.SimplyLobbyListener;
 import me.prestige.kit.listener.SoupListener;
+import me.prestige.kit.util.PersistableLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -24,11 +29,23 @@ public class Kits extends JavaPlugin {
 
     private DuelManager duelManager;
 
+
     @Override
     public void onEnable(){
-        duelManager = new DuelManager();
+        if (!new File(getDataFolder(), "config.yml").exists()) {
+            saveDefaultConfig();
+        }
+        getConfig().options().copyDefaults(true);
+        ConfigurationSerialization.registerClass(PersistableLocation.class);
+
+        duelManager = new DuelManager(this);
         registerListener();
         registerCommands();
+    }
+
+    @Override
+    public void onDisable(){
+        duelManager.save();
     }
 
     private void registerListener() {
@@ -40,6 +57,7 @@ public class Kits extends JavaPlugin {
     }
 
     private void registerCommands() {
+        getCommand("setup").setExecutor(new ArenaCommand(this));
         getCommand("duel").setExecutor(new DuelCommand(this));
         getCommand("accept").setExecutor(new AcceptCommand(this));
         // Handling permissions so its "command.commandName"

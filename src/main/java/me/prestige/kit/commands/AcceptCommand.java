@@ -47,6 +47,10 @@ public class AcceptCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "You cannot do this in a duel!");
             return true;
         }
+        if(plugin.getDuelManager().getLocations().size() != 2){
+            player.sendMessage(ChatColor.RED + "Please contact an admin, the arena must be setup!");
+            return true;
+        }
         // If they had a duel, it will be here, otherwise it'll be null
         DuelInvite duelInvite = plugin.getDuelManager().accept(other, player);
         // Check if they're trying to accept an expired or non invited duel

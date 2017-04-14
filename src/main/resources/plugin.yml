@@ -7,3 +7,4 @@ description: ${project.description}
 commands:
   duel:
   accept:
+  setup:

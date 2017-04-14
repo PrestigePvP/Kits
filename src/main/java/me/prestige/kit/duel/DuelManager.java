@@ -1,21 +1,47 @@
 package me.prestige.kit.duel;
 
 import lombok.Getter;
+import lombok.Setter;
+import me.prestige.kit.Kits;
+import me.prestige.kit.util.GenericUtils;
+import me.prestige.kit.util.PersistableLocation;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by TREHOME on 04/14/2017.
  */
+@Getter
 public class DuelManager {
 
-    @Getter
     private List<DuelInvite> inviteList = new ArrayList<>();
-    @Getter
     private List<Duel> activeDuels = new ArrayList<>();
+    @Setter
+    private Location one;
+    @Setter
+    private Location two;
+    private Kits plugin;
+
+    public DuelManager(Kits plugin){
+        this.plugin = plugin;
+        Object object = plugin.getConfig().get("locations");
+        if(object instanceof List) {
+            List<PersistableLocation> locations = GenericUtils.createList(object, PersistableLocation.class);
+            for(PersistableLocation location : locations) {
+                if(one == null){
+                    one = location.getLocation();
+                }else {
+                    two = location.getLocation();
+                }
+            }
+        }
+
+    }
 
 
     public boolean hasInvitedRecently(Player player) {
@@ -50,6 +76,11 @@ public class DuelManager {
             }
         }
         return null;
+    }
+
+    public void save(){
+        plugin.getConfig().set("locations", Arrays.asList(one, two));
+        plugin.saveConfig();
     }
 
 }
