@@ -42,6 +42,11 @@ public class AcceptCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "That player is currently in a duel");
             return true;
         }
+        // If they bypassed the duel thing somehow.
+        if(other.equals(player)) {
+            player.sendMessage(ChatColor.RED + "You cannot do this.");
+            return true;
+        }
         // Make sure the player inviting isn't in a duel
         if (plugin.getDuelManager().getDuel(player) != null){
             player.sendMessage(ChatColor.RED + "You cannot do this in a duel!");

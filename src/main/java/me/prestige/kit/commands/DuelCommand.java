@@ -36,6 +36,11 @@ public class DuelCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "Player " + ChatColor.GRAY + args[0] + ChatColor.RED + " not found!");
             return true;
         }
+        // Make sure they're not dueling their self
+        if(other.equals(player)) {
+            player.sendMessage(ChatColor.RED + "You cannot duel yourself.");
+            return true;
+        }
         if(plugin.getDuelManager().getOne() == null || plugin.getDuelManager().getTwo() == null){
             player.sendMessage(ChatColor.RED + "Please contact an admin, the arena must be setup!");
             return true;
