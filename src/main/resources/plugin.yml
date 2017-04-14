@@ -1,0 +1,9 @@
+name: ${project.name}
+main: me.prestige.kit.Kits
+author: Prestige_PvP
+version: ${project.version}
+commit: ${git.commit.id.abbrev}, Time ${git.commit.time}
+description: ${project.description}
+commands:
+  duel:
+  accept:
