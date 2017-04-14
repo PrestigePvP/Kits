@@ -31,11 +31,11 @@ public class SimplyLobbyListener  implements Listener{
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onCancelHit(EntityDamageByEntityEvent e){
         if(e.getDamager() instanceof Player && e.getEntity() instanceof Player){
-            if(plugin.getDuelManager().getDuel((Player) e.getDamager()) != null || plugin.getDuelManager().getDuel((Player) e.getEntity()) != null){
+            if(plugin.getDuelManager().getDuel((Player) e.getDamager()) == null || plugin.getDuelManager().getDuel((Player) e.getEntity()) == null){
                 e.setCancelled(true);
             }
         }else {

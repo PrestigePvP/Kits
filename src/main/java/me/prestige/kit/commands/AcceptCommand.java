@@ -47,7 +47,7 @@ public class AcceptCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "You cannot do this in a duel!");
             return true;
         }
-        if(plugin.getDuelManager().getLocations().size() != 2){
+        if(plugin.getDuelManager().getOne() == null || plugin.getDuelManager().getTwo() == null){
             player.sendMessage(ChatColor.RED + "Please contact an admin, the arena must be setup!");
             return true;
         }
