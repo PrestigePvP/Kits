@@ -54,18 +54,9 @@ public class Duel {
 
     }
 
-    public void end(Player winner, UUID loser) {
-        Player dead = Bukkit.getPlayer(loser);
+    public void end(Player winner, Player dead) {
+
         Bukkit.getPluginManager().callEvent(new DuelEndEvent(this));
-        winner.removePotionEffect(PotionEffectType.SPEED);
-        winner.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-        winner.teleport(Bukkit.getWorld("world").getSpawnLocation());
-        winner.sendMessage(ChatColor.YELLOW + "You have won the fight against " + Bukkit.getOfflinePlayer(loser).getName());
-        winner.getInventory().clear();
-        winner.getInventory().setArmorContents(null);
-        winner.setHealth(winner.getMaxHealth());
-        winner.setFoodLevel(20);
-        winner.setSaturation(20);
         if (dead.isDead()) {
             dead.spigot().respawn();
         }
@@ -73,6 +64,19 @@ public class Duel {
         dead.getInventory().clear();
         dead.getInventory().setArmorContents(null);
         dead.teleport(Bukkit.getWorld("world").getSpawnLocation());
+
+        // Handle winner
+        winner.removePotionEffect(PotionEffectType.SPEED);
+        winner.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        winner.teleport(Bukkit.getWorld("world").getSpawnLocation());
+        winner.sendMessage(ChatColor.YELLOW + "You have won the fight against " + dead.getName());
+        winner.getInventory().clear();
+        winner.getInventory().setArmorContents(null);
+        winner.setHealth(winner.getMaxHealth());
+        winner.setFoodLevel(20);
+        winner.setSaturation(20);
+
+        // Make sure we're actually ending this duel
         Kits.getPlugin(Kits.class).getDuelManager().getActiveDuels().remove(this);
     }
 
@@ -96,7 +100,8 @@ public class Duel {
     private int countSoups(Player player) {
         int amount = 0;
         for (ItemStack soup : player.getInventory().getContents()) {
-            if (soup == null || !soup.getType().equals(Material.MUSHROOM_SOUP)) continue;
+            if(soup == null) continue;
+            if(!soup.getType().equals(Material.MUSHROOM_SOUP)) continue;
             amount++;
         }
         return amount;

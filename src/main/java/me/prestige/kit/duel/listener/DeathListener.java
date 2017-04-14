@@ -21,7 +21,7 @@ public class DeathListener implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         Duel duel;
         if ((duel = plugin.getDuelManager().getDuel(e.getPlayer())) == null) return;
-        duel.end(Bukkit.getPlayer(duel.getOpponent(e.getPlayer().getUniqueId())), e.getPlayer().getUniqueId());
+        duel.end(Bukkit.getPlayer(duel.getOpponent(e.getPlayer().getUniqueId())), e.getPlayer());
     }
 
     @EventHandler
@@ -29,10 +29,12 @@ public class DeathListener implements Listener {
         Duel duel;
         if ((duel = plugin.getDuelManager().getDuel(e.getEntity())) == null) return;
         e.setDeathMessage(null);
+        e.setDroppedExp(0);
+        e.getDrops().clear();
         plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
-              duel.end(e.getEntity().getKiller(), e.getEntity().getUniqueId());
+              duel.end(e.getEntity().getKiller(), e.getEntity());
             }
         }, 1);
     }

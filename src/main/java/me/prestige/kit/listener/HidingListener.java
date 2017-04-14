@@ -71,12 +71,7 @@ public class HidingListener implements Listener {
     @EventHandler
     public void onEntitySpawn(PlayerDropItemEvent e) {
         for (Player on : Bukkit.getOnlinePlayers()) {
-            // They're in a duel
-            if (plugin.getDuelManager().getDuel(e.getPlayer()) == null)
-                continue;
-            // If they're either player in the duel, then we wanna show that.
-            if (plugin.getDuelManager().getDuel(e.getPlayer()).getAttacker().equals(on.getUniqueId()) || plugin.getDuelManager().getDuel(e.getPlayer()).getOther().equals(on.getUniqueId()))
-                continue;
+            if(on.canSee(e.getPlayer())) continue;
             on.hide(e.getItemDrop());
         }
     }
