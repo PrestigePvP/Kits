@@ -28,6 +28,7 @@ public class Duel {
     public Duel(DuelInvite duelInvite) {
         this.attacker = duelInvite.getSender();
         this.other = duelInvite.getReceiver();
+        // I have it, but don't use it. If you wanted you could display game length.
         this.startTime = System.currentTimeMillis();
     }
 
@@ -37,7 +38,9 @@ public class Duel {
         if (one == null || two == null) {
             return;
         }
+        // Make sure the duel is registered.
         Kits.getPlugin(Kits.class).getDuelManager().getActiveDuels().add(this);
+        // Call this for hiding folks
         Bukkit.getPluginManager().callEvent(new DuelStartEvent(this));
         // Teleport them
         one.teleport(Bukkit.getWorld("world").getSpawnLocation().add(0, 0, 10));
@@ -55,23 +58,29 @@ public class Duel {
     }
 
     public void end(Player winner, Player dead) {
-
+        // Call this to unhide folks
         Bukkit.getPluginManager().callEvent(new DuelEndEvent(this));
+        // respawn the player so they can see our pretty message
         if (dead.isDead()) {
             dead.spigot().respawn();
         }
+        // send our pretty message
         dead.sendMessage(ChatColor.GOLD + "You have lost the " + ChatColor.GREEN + "Buffed w/ Speed II " + ChatColor.GOLD + "match to " + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + "." + ChatColor.WHITE + winner.getName() + ChatColor.GOLD + " had " + ChatColor.RED + countSoups(winner) + ChatColor.GOLD + " soups and " + ChatColor.RED + Math.round(winner.getHealth() / 2) + " hearts " + ChatColor.GOLD + "left.");
+        // In case something weird happened we need to clear their stuff
         dead.getInventory().clear();
         dead.getInventory().setArmorContents(null);
+        // Teleport them to spawn
         dead.teleport(Bukkit.getWorld("world").getSpawnLocation());
 
         // Handle winner
-        winner.removePotionEffect(PotionEffectType.SPEED);
-        winner.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         winner.teleport(Bukkit.getWorld("world").getSpawnLocation());
         winner.sendMessage(ChatColor.YELLOW + "You have won the fight against " + dead.getName());
+        // Clear their inventory and such
+        winner.removePotionEffect(PotionEffectType.SPEED);
+        winner.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         winner.getInventory().clear();
         winner.getInventory().setArmorContents(null);
+        // Make them full health, so they don't die somehow in spawn.
         winner.setHealth(winner.getMaxHealth());
         winner.setFoodLevel(20);
         winner.setSaturation(20);
@@ -81,6 +90,7 @@ public class Duel {
     }
 
     private void fillInventory(Player player) {
+        // Add all the things for a duel.
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.getInventory().setHelmet(new ItemStack(Material.IRON_HELMET));
@@ -100,6 +110,7 @@ public class Duel {
     private int countSoups(Player player) {
         int amount = 0;
         for (ItemStack soup : player.getInventory().getContents()) {
+            // Make sure the item isn't null, and a soup if so then add it.
             if(soup == null) continue;
             if(!soup.getType().equals(Material.MUSHROOM_SOUP)) continue;
             amount++;

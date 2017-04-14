@@ -6,6 +6,7 @@ import me.prestige.kit.commands.DuelCommand;
 import me.prestige.kit.duel.DuelManager;
 import me.prestige.kit.duel.listener.DeathListener;
 import me.prestige.kit.listener.HidingListener;
+import me.prestige.kit.listener.SimplyLobbyListener;
 import me.prestige.kit.listener.SoupListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +35,7 @@ public class Kits extends JavaPlugin {
         PluginManager pluginManager  = Bukkit.getPluginManager();
         pluginManager.registerEvents(new HidingListener(this), this);
         pluginManager.registerEvents(new SoupListener(),this);
+        pluginManager.registerEvents(new SimplyLobbyListener(this), this);
         pluginManager.registerEvents(new DeathListener(this),this);
     }
 
